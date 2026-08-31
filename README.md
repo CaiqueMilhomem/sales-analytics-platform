@@ -1,8 +1,8 @@
 # Sales Analytics Platform
 
 Pipeline de dados de vendas de e-commerce cobrindo o fluxo completo:
-**SQL (consultas e stored procedures) → automação em Python → API com
-FastAPI → integração com API externa → resposta JSON consolidada.**
+**SQL (consultas e stored procedures) → automação em Python →
+FastAPI → integração API cotação → resposta JSON consolidada.**
 
 ## Visão geral
 
