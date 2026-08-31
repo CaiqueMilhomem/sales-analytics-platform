@@ -33,7 +33,9 @@ BEGIN
     SELECT
         COUNT(DISTINCT v.id)::BIGINT,
         COALESCE(SUM(iv.quantidade * iv.preco_unitario), 0)::NUMERIC,
-        COALESCE(SUM(iv.quantidade * iv.preco_unitario) / NULLIF(COUNT(DISTINCT v.id), 0), 0)::NUMERIC,
+        -- ROUND para 2 casas: ticket_medio e um valor monetario, e a divisao
+        -- raramente e exata (sem isso, o JSON sai com dizimas tipo 778.2881481481481).
+        ROUND(COALESCE(SUM(iv.quantidade * iv.preco_unitario) / NULLIF(COUNT(DISTINCT v.id), 0), 0)::NUMERIC, 2),
         COALESCE(SUM(iv.quantidade), 0)::BIGINT
     FROM vendas v
     JOIN itens_venda iv ON iv.venda_id = v.id
@@ -118,7 +120,7 @@ BEGIN
         c.nome,
         COUNT(DISTINCT v.id)::BIGINT,
         COALESCE(SUM(iv.quantidade * iv.preco_unitario), 0)::NUMERIC,
-        COALESCE(SUM(iv.quantidade * iv.preco_unitario) / NULLIF(COUNT(DISTINCT v.id), 0), 0)::NUMERIC
+        ROUND(COALESCE(SUM(iv.quantidade * iv.preco_unitario) / NULLIF(COUNT(DISTINCT v.id), 0), 0)::NUMERIC, 2)
     FROM clientes c
     JOIN vendas v       ON v.cliente_id = c.id
     JOIN itens_venda iv ON iv.venda_id = v.id
